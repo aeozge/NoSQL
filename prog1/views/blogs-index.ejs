@@ -1,0 +1,83 @@
+<% include partials/header %>
+
+    <h1>ADD BLOG</h1>
+    <% if(errors != undefined){ %>
+    <ul>
+    <% errors.forEach(function(error){ %>
+    <li style="color:red"><%= error.msg %></li>
+    <% }) %>
+    </ul>
+    <% } %>
+
+         <form method="POST" action="/blogs/add">
+            <label><b>Title </b></label><br>
+            <input type="text" name="title" size="40"><br>
+            <label><b>Slug </b></label><br>
+            <input type="text" name="slug" size="40"><br>
+            <br>
+            <label><b>Author </b></label><br>
+            <select name="author">
+                <% users.forEach(function(user){ %>
+                <option value=<%= user._id %>><%= user.name %></option>
+                <% }) %>
+            </select>
+            <br>
+            <br>
+        <label><b>Body </b></label><br>
+        <textarea name="body"  style="width:300px;height:100px;"></textarea><br>
+        <label><b>Comment </b></label><br>
+        <textarea name="comment"  style="width:300px;height:100px;"></textarea><br>
+        <label><b>Category </b></label><br>
+        <input type="text"  name="category" size="40"><br>
+        <br>
+        <input type="submit" value="Submit">
+        </form>
+ 
+    </br>
+<h1>BLOGS</h1>
+<% blogs.forEach(function(blog){ %>
+<div class="blog">
+<h3> <%= blog.title %> </h3>
+<div class="blog-div">
+    <i>by <%= blog.author.name %></i></br></br>
+    <%= blog.body %></br></br>
+<div class="blog-div">
+    <b>Comments</b>
+    <% for (var i =0; i < blog.comments.length; i++) {%>
+        <ul>
+            <li><%= blog.comments[i].comment %> (<%= blog.comments[i].created_at.toDateString() %>)</li>
+            
+            </ul>
+            <% } %>
+</div>
+
+<div class="blog-div">
+    <b>Categories</b>
+    <% for (var i =0; i < blog.category.length; i++) {%>
+        <ul>
+            <li><%= blog.category[i].name %> </li>
+            </ul>
+        <% } %>
+</div>
+
+        <table>
+            <tr>
+                <td>
+                    <a href='/blogs/edit/<%= blog._id %>'>Edit</a>&nbsp;
+                </td>
+              
+                    <td>
+                        <form method="post" action="/blogs/delete/<%= blog._id %>">
+                            <input type="submit" name="delete" value='DELETE' onClick="return confirm('Are you sure you want to delete?')"/>
+                            <input type="hidden" name="_method" value="DELETE" />
+                        </form>
+                    </td>
+               
+            </tr>
+            
+        </table>
+    <% }) %>
+</div>
+</div>
+
+<% include partials/footer %>
